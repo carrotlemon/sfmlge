@@ -13,10 +13,43 @@
 
 using namespace sf;
 
+struct Object { // example object for testing quadtree
+    float x, y, width, height, id;
+
+    quadtree::Box<float> getBoundingBox() const {
+        return quadtree::Box<float>(x, y, width, height);
+    }
+};
+
 int main()
 {
     // Test QuadTree
-    //auto quadtree = quadtree::QuadTree<Node*, decltype(getBox)>(box, getBox);
+    quadtree::Box<float> boundary(0, 0, 100, 100);
+
+    std::vector<Object> objects = {
+        {10, 10, 5, 5, 1},
+        {50, 50, 10, 10, 2},
+        {70, 70, 8, 8, 3}
+    };
+
+    quadtree::QuadTree < Object, std::function<quadtree::Box<float>(const Object&)>, std::function<bool(const Object&, const Object&)>> quadtree(
+        boundary,
+        [](const Object& obj) {return obj.getBoundingBox(); },
+        [](const Object& a, const Object& b) {return a.id == b.id; }
+    );
+
+    for (const auto& obj : objects) {
+        quadtree.add(obj);
+    }
+
+    quadtree::Box<float> queryArea(40, 40, 20, 20);
+    auto results = quadtree.query(queryArea);
+
+    std::cout << "Objects in query area: ";
+    for (const auto& obj : results) {
+        std::cout << obj.id << " ";
+    }
+    std::cout << std::endl;
 
     // Test Button
     Button b([]() {std::cout << "button works";});
