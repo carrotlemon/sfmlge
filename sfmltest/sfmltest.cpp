@@ -2,15 +2,26 @@
 #include <iostream>
 #include <vector>
 #include <fstream>
+#include <functional>
 
 #include "Block.h"
 #include "Room.h"
 #include "Player.h"
+#include "Button.h"
+#include "QuadTree.h"
+#include "Box.h"
 
 using namespace sf;
 
 int main()
 {
+    // Test QuadTree
+    //auto quadtree = quadtree::QuadTree<Node*, decltype(getBox)>(box, getBox);
+
+    // Test Button
+    Button b([]() {std::cout << "button works";});
+    b.onClick();
+
     // Initialize window
     sf::RenderWindow window(sf::VideoMode(1440, 1080), "SFML works!");
     
@@ -44,13 +55,13 @@ int main()
     bool pausedthistime = false;
 
     // Block and Room test
-    Block block(Vector2f(250, 250), Vector2f(168, 168), std::string("shrimp.png"));
+    Block block(Vector2f(256, 256), Vector2f(64, 64), std::string("sprites/grass.png"));
     std::vector<Block> blocklist;
     blocklist.push_back(block);
     Room room(blocklist);
 
     // Player vars
-    float speed = 1000;
+    float speed = 500;
     Vector2f velocity(0, 0);
     Player player("shrimp64.png");
     player.setPos(Vector2f(window.getSize().x / 2, window.getSize().y / 2));

@@ -22,17 +22,6 @@ Block::Block(Vector2f p, Vector2f s, const std::string& str) {
 
 bool Block::collides(Vector2f p, Vector2f s) { // Assumes both are Rectangles
 	// AABB - Axis Aligned Bounding Box
-	//std::cout << pos.x << " " << pos.y << " " << p.x << " " << p.y << " " << size.x << " " << size.y << " " << s.x << " " << s.y << std::endl;
-	//std::cout << "running collides" << std::endl;
-	bool result = (
-		pos.x < p.x + s.x &&
-		pos.x + size.x > p.x &&
-		pos.y < p.y + s.y &&
-		pos.y + size.y > p.y
-		);
-	if (result) {
-		std::cout << result << std::endl;
-	}
 	return (
 			pos.x < p.x + s.x &&
 			pos.x + size.x > p.x &&
