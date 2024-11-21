@@ -27,7 +27,7 @@ void Button::setAction(std::function<void()> func) {
 }
 
 // Method that calls the stored function
-void Button::onClick() {
+void Button::click() {
     if (action) { // Check if a function is set
         action();
     }

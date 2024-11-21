@@ -21,6 +21,6 @@ public:
     void addButton(const Button& b);
     Button removeButton(const std::string& id);
     void draw(RenderWindow& w);
-    void click(Vector2f mousePos);
+    void click(Vector2i mousePos);
 };
 

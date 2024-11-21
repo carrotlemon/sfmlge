@@ -105,6 +105,10 @@ int main()
         if (Keyboard::isKeyPressed(Keyboard::Scan::Escape)) {
             if (!pausedthistime) {
                 paused = !paused;
+                if (paused)
+                    currentMenu = testMenu;
+                else
+                    currentMenu = noMenu;
                 pausedthistime = true;
             }
         }
@@ -127,26 +131,27 @@ int main()
             }
         }
         else { // game paused
-
         }
         // Draw stuff
         window.clear();
 
         //window.draw(shape);
         room.draw(window);
-        window.draw(sprite);
+        
         for (RectangleShape line : lines) {
             window.draw(line);
         }
         player.draw(window);
 
         if (paused) {
-            currentMenu = testMenu;
+            if (Mouse::isButtonPressed(Mouse::Button::Left))
+                currentMenu.click(Mouse::getPosition(window));
         }
         else {
-            currentMenu = noMenu;
+            
         }
         currentMenu.draw(window);
+        window.draw(sprite);
 
         window.display();
     }

@@ -1,7 +1,12 @@
 #include "Menu.h"
 
 #include <SFML/Graphics.hpp>
+#include <vector>
+#include "Box.h"
+#include "QuadTree.h"
 #include "Button.h"
+
+using namespace sf;
 
 // Constructor for empty menu (no menu open)
 Menu::Menu() :
@@ -46,8 +51,14 @@ void Menu::draw(RenderWindow& w) {
     }
 }
 
-void Menu::click(Vector2f mousePos) {
-
+void Menu::click(Vector2i mousePos) {
+    // check if click is in bounds first
+    quadtree::Box<float> clickArea(mousePos.x, mousePos.y, 10.f, 10.f);
+    std::vector<Button> clicked = buttons->query(clickArea);
+    std::cout << "clicked: " << clicked.size() << std::endl;
+    for (Button b : clicked) {
+        b.click();
+    }
 }
 
 
