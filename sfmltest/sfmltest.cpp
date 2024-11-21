@@ -27,23 +27,23 @@ int main()
     quadtree::Box<float> boundary(0, 0, 100, 100);
 
     std::vector<Object> objects = {
-        {10, 10, 5, 5, 1},
+        {10, 10, 5, 5, 1}, // didn't know you could multi constructor it like that
         {50, 50, 10, 10, 2},
         {70, 70, 8, 8, 3}
     };
 
     quadtree::QuadTree < Object, std::function<quadtree::Box<float>(const Object&)>, std::function<bool(const Object&, const Object&)>> quadtree(
-        boundary,
-        [](const Object& obj) {return obj.getBoundingBox(); },
-        [](const Object& a, const Object& b) {return a.id == b.id; }
+        boundary, // boundary of the quadtree (screen usually)
+        [](const Object& obj) {return obj.getBoundingBox(); }, // get box method
+        [](const Object& a, const Object& b) {return a.id == b.id; } // equals method
     );
 
     for (const auto& obj : objects) {
-        quadtree.add(obj);
+        quadtree.add(obj); // use .add() to add objects
     }
 
     quadtree::Box<float> queryArea(40, 40, 20, 20);
-    auto results = quadtree.query(queryArea);
+    auto results = quadtree.query(queryArea); // query finds the objects in the query area
 
     std::cout << "Objects in query area: ";
     for (const auto& obj : results) {
@@ -89,8 +89,10 @@ int main()
 
     // Block and Room test
     Block block(Vector2f(256, 256), Vector2f(64, 64), std::string("sprites/grass.png"));
+    Block block2(Vector2f(320, 256), Vector2f(64, 64), std::string("sprites/grass.png"));
     std::vector<Block> blocklist;
     blocklist.push_back(block);
+    blocklist.push_back(block2);
     Room room(blocklist);
 
     // Player vars
