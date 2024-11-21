@@ -10,6 +10,8 @@
 #include "Button.h"
 #include "QuadTree.h"
 #include "Box.h"
+#include "Menu.h"
+#include "Misc.h"
 
 using namespace sf;
 
@@ -23,37 +25,15 @@ struct Object { // example object for testing quadtree
 
 int main()
 {
-    // Test QuadTree
-    quadtree::Box<float> boundary(0, 0, 100, 100);
-
-    std::vector<Object> objects = {
-        {10, 10, 5, 5, 1}, // didn't know you could multi constructor it like that
-        {50, 50, 10, 10, 2},
-        {70, 70, 8, 8, 3}
-    };
-
-    quadtree::QuadTree < Object, std::function<quadtree::Box<float>(const Object&)>, std::function<bool(const Object&, const Object&)>> quadtree(
-        boundary, // boundary of the quadtree (screen usually)
-        [](const Object& obj) {return obj.getBoundingBox(); }, // get box method
-        [](const Object& a, const Object& b) {return a.id == b.id; } // equals method
-    );
-
-    for (const auto& obj : objects) {
-        quadtree.add(obj); // use .add() to add objects
-    }
-
-    quadtree::Box<float> queryArea(40, 40, 20, 20);
-    auto results = quadtree.query(queryArea); // query finds the objects in the query area
-
-    std::cout << "Objects in query area: ";
-    for (const auto& obj : results) {
-        std::cout << obj.id << " ";
-    }
-    std::cout << std::endl;
+    std::cout << misc() << std::endl;
 
     // Test Button
-    Button b([]() {std::cout << "button works";});
-    b.onClick();
+    Button b("test", "shrimp.png", Vector2f(800, 800), Vector2f(64, 64),
+        []() {std::cout << "button works"; });
+    Menu testMenu("testMenu", Vector2f(0, 0), Vector2f(1080, 1440));
+    testMenu.addButton(b);
+    Menu noMenu("", Vector2f(0, 0), Vector2f(1080, 1440));
+    //b.onClick();
 
     // Initialize window
     sf::RenderWindow window(sf::VideoMode(1440, 1080), "SFML works!");
@@ -68,13 +48,13 @@ int main()
 
     // Grid of lines spaced 64 pixels apart
     std::vector<RectangleShape> lines;
-    for (int i = 0; i < window.getSize().y; i += 64) {
+    for (int i = 0; i < (int)window.getSize().y; i += 64) {
         RectangleShape line(Vector2f(window.getSize().x, 2.f));
         line.setFillColor(Color::Magenta);
         line.setPosition(0, i);
         lines.push_back(line);
     }
-    for (int i = 0; i < window.getSize().x; i += 64) {
+    for (int i = 0; i < (int)window.getSize().x; i += 64) {
         RectangleShape line(Vector2f(window.getSize().y, 2.f));
         line.setFillColor(Color::Magenta);
         line.setPosition(i, 0);
@@ -85,6 +65,7 @@ int main()
     // Clock
     Clock clock;
     bool paused = false;
+    Menu currentMenu; // default menu does nothi
     bool pausedthistime = false;
 
     // Block and Room test
@@ -115,9 +96,6 @@ int main()
                 window.close();
         }
 
-        // Debug Prints
-        //std::cout << block << std::endl << player << std::endl;
-
         // Update cursor position
         sf::Vector2i mousepos = sf::Mouse::getPosition(window);
         sprite.setPosition(mousepos.x - (int)(texture.getSize().x / 2), mousepos.y - (int)(texture.getSize().y / 2));
@@ -136,16 +114,7 @@ int main()
 
         if (!paused) {
             // Movement Controls
-            velocity = Vector2f(0, 0);
-
-            if (Keyboard::isKeyPressed(Keyboard::Scan::Right))
-                velocity.x += speed;
-            if (Keyboard::isKeyPressed(Keyboard::Scan::Left))
-                velocity.x -= speed;
-            if (Keyboard::isKeyPressed(Keyboard::Scan::Up))
-                velocity.y -= speed;
-            if (Keyboard::isKeyPressed(Keyboard::Scan::Down))
-                velocity.y += speed;
+            velocity = movementControls(speed);
 
             velocity.y *= dt.asSeconds();
             velocity.x *= dt.asSeconds();
@@ -160,9 +129,6 @@ int main()
         else { // game paused
 
         }
-
-
-
         // Draw stuff
         window.clear();
 
@@ -175,14 +141,22 @@ int main()
         player.draw(window);
 
         if (paused) {
-            
+            currentMenu = testMenu;
         }
+        else {
+            currentMenu = noMenu;
+        }
+        currentMenu.draw(window);
 
         window.display();
     }
 
     return 0;
 }
+
+/*
+
+*/
 
 //// File Writing
 //std::ofstream MyFile("filename.txt");
