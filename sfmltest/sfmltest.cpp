@@ -11,6 +11,7 @@
 #include "QuadTree.h"
 #include "Box.h"
 #include "Menu.h"
+#include "Misc.h"
 
 using namespace sf;
 
@@ -24,10 +25,15 @@ struct Object { // example object for testing quadtree
 
 int main()
 {
+    std::cout << misc() << std::endl;
+
     // Test Button
     Button b("test", "shrimp.png", Vector2f(800, 800), Vector2f(64, 64),
         []() {std::cout << "button works"; });
-    b.onClick();
+    Menu testMenu("testMenu", Vector2f(0, 0), Vector2f(1080, 1440));
+    testMenu.addButton(b);
+    Menu noMenu("", Vector2f(0, 0), Vector2f(1080, 1440));
+    //b.onClick();
 
     // Initialize window
     sf::RenderWindow window(sf::VideoMode(1440, 1080), "SFML works!");
@@ -42,13 +48,13 @@ int main()
 
     // Grid of lines spaced 64 pixels apart
     std::vector<RectangleShape> lines;
-    for (int i = 0; i < window.getSize().y; i += 64) {
+    for (int i = 0; i < (int)window.getSize().y; i += 64) {
         RectangleShape line(Vector2f(window.getSize().x, 2.f));
         line.setFillColor(Color::Magenta);
         line.setPosition(0, i);
         lines.push_back(line);
     }
-    for (int i = 0; i < window.getSize().x; i += 64) {
+    for (int i = 0; i < (int)window.getSize().x; i += 64) {
         RectangleShape line(Vector2f(window.getSize().y, 2.f));
         line.setFillColor(Color::Magenta);
         line.setPosition(i, 0);
@@ -61,6 +67,7 @@ int main()
     bool paused = false;
     Menu currentMenu; // default menu does nothing
     bool pausedthistime = false;
+    bool clickedthistime = false;
 
     // Block and Room test
     Block block(Vector2f(256, 256), Vector2f(64, 64), std::string("sprites/grass.png"));
@@ -99,6 +106,10 @@ int main()
         if (Keyboard::isKeyPressed(Keyboard::Scan::Escape)) {
             if (!pausedthistime) {
                 paused = !paused;
+                if (paused)
+                    currentMenu = testMenu;
+                else
+                    currentMenu = noMenu;
                 pausedthistime = true;
             }
         }
@@ -108,16 +119,7 @@ int main()
 
         if (!paused) {
             // Movement Controls
-            velocity = Vector2f(0, 0);
-
-            if (Keyboard::isKeyPressed(Keyboard::Scan::Right))
-                velocity.x += speed;
-            if (Keyboard::isKeyPressed(Keyboard::Scan::Left))
-                velocity.x -= speed;
-            if (Keyboard::isKeyPressed(Keyboard::Scan::Up))
-                velocity.y -= speed;
-            if (Keyboard::isKeyPressed(Keyboard::Scan::Down))
-                velocity.y += speed;
+            velocity = movementControls(speed);
 
             velocity.y *= dt.asSeconds();
             velocity.x *= dt.asSeconds();
@@ -130,22 +132,35 @@ int main()
             }
         }
         else { // game paused
-
         }
         // Draw stuff
         window.clear();
 
         //window.draw(shape);
         room.draw(window);
-        window.draw(sprite);
+        
         for (RectangleShape line : lines) {
             window.draw(line);
         }
         player.draw(window);
 
         if (paused) {
+            if (Mouse::isButtonPressed(Mouse::Button::Left)) {
+                if (!clickedthistime) {
+                    currentMenu.click(Mouse::getPosition(window));
+                    clickedthistime = true;
+                }
+            }
+            else {
+                clickedthistime = false;
+            }
+                
+        }
+        else {
             
         }
+        currentMenu.draw(window);
+        window.draw(sprite);
 
         window.display();
     }

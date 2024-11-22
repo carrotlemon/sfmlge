@@ -56,10 +56,20 @@ namespace quadtree {
                 top <= box.top && box.getBottom() <= getBottom();
         }
 
+        constexpr bool contains(Vector2<T> point) const noexcept
+        {
+            return left <= point.x && point.x <= getRight() &&
+                top <= point.y && point.x <= getBottom();
+        }
+
         constexpr bool intersects(const Box<T>& box) const noexcept
         {
             return !(left >= box.getRight() || getRight() <= box.left ||
                 top >= box.getBottom() || getBottom() <= box.top);
+        }
+
+        friend std::ostream& operator<< (std::ostream& os, const Box& v) {
+            return os << v.left << " " << v.top << " " << v.width << " " << v.height;
         }
 	};
 }

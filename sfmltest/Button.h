@@ -17,10 +17,13 @@ private:
     Vector2f pos;
     Vector2f size;
 public:
-    Button(const std::string& identity, const std::string& str, Vector2f p, Vector2f s, std::function<void()> a);
-    void setAction(std::function<void()> func);
-    void onClick();
-    quadtree::Box<float> getBoundingBox() const;
-    bool equals(const Button& other) const;
+  Button();
+  Button(const std::string& identity);
+  Button(const std::string& identity, const std::string& str, Vector2f p, Vector2f s, std::function<void()> a);
+  void setAction(std::function<void()> func);
+  void click();
+  quadtree::Box<float> getBoundingBox() const;
+  bool equals(const Button& other) const;
+  void draw(RenderWindow& w);
 };
 

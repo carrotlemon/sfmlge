@@ -143,6 +143,7 @@
     <ClInclude Include="Box.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="Menu.h" />
+    <ClInclude Include="Misc.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="QuadTree.h" />
     <ClInclude Include="Room.h" />

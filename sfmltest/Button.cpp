@@ -6,6 +6,16 @@
 
 using namespace std;
 
+Button::Button()
+{
+
+}
+
+Button::Button(const std::string& identity) : 
+    id(identity) {
+
+}
+
 Button::Button(const std::string& identity, const std::string& str, Vector2f p, Vector2f s, std::function<void()> a) : 
     id(identity), pos(p), size(s), action(a) {
     if (!texture.loadFromFile(str)) {}
@@ -17,7 +27,7 @@ void Button::setAction(std::function<void()> func) {
 }
 
 // Method that calls the stored function
-void Button::onClick() {
+void Button::click() {
     if (action) { // Check if a function is set
         action();
     }
@@ -32,4 +42,9 @@ quadtree::Box<float> Button::getBoundingBox() const {
 
 bool Button::equals(const Button& other) const {
     return id == other.id;
+  }
+
+void Button::draw(RenderWindow& w) {
+    sprite.setPosition(pos);
+    w.draw(sprite);
 }
