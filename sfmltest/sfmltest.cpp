@@ -67,6 +67,7 @@ int main()
     bool paused = false;
     Menu currentMenu; // default menu does nothi
     bool pausedthistime = false;
+    bool clickedthistime = false;
 
     // Block and Room test
     Block block(Vector2f(256, 256), Vector2f(64, 64), std::string("sprites/grass.png"));
@@ -144,8 +145,16 @@ int main()
         player.draw(window);
 
         if (paused) {
-            if (Mouse::isButtonPressed(Mouse::Button::Left))
-                currentMenu.click(Mouse::getPosition(window));
+            if (Mouse::isButtonPressed(Mouse::Button::Left)) {
+                if (!clickedthistime) {
+                    currentMenu.click(Mouse::getPosition(window));
+                    clickedthistime = true;
+                }
+            }
+            else {
+                clickedthistime = false;
+            }
+                
         }
         else {
             

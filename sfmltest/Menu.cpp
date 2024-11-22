@@ -52,9 +52,7 @@ void Menu::draw(RenderWindow& w) {
 }
 
 void Menu::click(Vector2i mousePos) {
-    // check if click is in bounds first
-    quadtree::Box<float> clickArea(mousePos.x, mousePos.y, 10.f, 10.f);
-    std::vector<Button> clicked = buttons->query(clickArea);
+    std::vector<Button> clicked = buttons->findValuesAtPoint(mousePos.x, mousePos.y);
     std::cout << "clicked: " << clicked.size() << std::endl;
     for (Button b : clicked) {
         b.click();

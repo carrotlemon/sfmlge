@@ -40,6 +40,19 @@ namespace quadtree
             return values;
         }
 
+        std::vector<T> getAllValues() {
+            auto values = std::vector<T>();
+            query(mRoot.get(), mBox, mBox, values);
+            return values;
+        }
+
+        std::vector<T> findValuesAtPoint(float x, float y) {
+            std::vector<T> result;
+            findValuesAtPoint(mRoot.get(), x, y, result);
+            return result;
+        }
+
+
         std::vector<std::pair<T, T>> findAllIntersections() const
         {
             auto intersections = std::vector<std::pair<T, T>>();
@@ -64,8 +77,8 @@ namespace quadtree
 
         Box<Float> mBox;
         std::unique_ptr<Node> mRoot;
-        GetBox mGetBox;
-        Equal mEqual;
+        GetBox mGetBox; // method from template
+        Equal mEqual; // method from template
 
         bool isLeaf(const Node* node) const
         {
@@ -213,6 +226,22 @@ namespace quadtree
             // Swap with the last element and pop back
             *it = std::move(node->values.back());
             node->values.pop_back();
+        }
+
+        void findValuesAtPoint(Node* node, float x, float y, std::vector<T>& result) {
+            if (!mBox.contains(Vector2<float>(x, y))) {
+                return;
+            }
+            for (const auto& element : node->values) {
+                if (element.getBoundingBox().contains(Vector2<float>(x, y))) {
+                    result.push_back(element);
+                }
+            }
+            for (const std::unique_ptr<Node>& child : node->children) {
+                if (child) {
+                    findValuesAtPoint(child.get(), x, y, result);
+                }
+            }
         }
 
         bool tryMerge(Node* node)
