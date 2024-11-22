@@ -16,8 +16,8 @@ Button::Button(const std::string& identity) :
 
 }
 
-Button::Button(const std::string& identity, const std::string& str, Vector2f p, Vector2f s, std::function<void()> a) : 
-    id(identity), pos(p), size(s), actionNone(a) {
+Button::Button(const std::string& identity, const std::string& str, Vector2f p, Vector2f s, std::function<void(bool&)> a) :
+    id(identity), pos(p), size(s), actionBool(a) {
     if (!texture.loadFromFile(str)) {}
     sprite.setTexture(texture);
 }

@@ -27,7 +27,7 @@ int main()
 {
     // Test Button
     Button b("test", "shrimp.png", Vector2f(800, 800), Vector2f(64, 64),
-        []() {std::cout << "button works"; });
+        [](bool& blank) {std::cout << "button works"; });
     Button pauseButton("pause", "xButton.png", Vector2f(50, 50), Vector2f(256, 256), 
         [](bool& paused) { paused = !paused; });
     Menu testMenu("testMenu", Vector2f(0, 0), Vector2f(1080, 1440));
@@ -48,14 +48,14 @@ int main()
 
     // Grid of lines spaced 64 pixels apart
     std::vector<RectangleShape> lines;
-    for (int i = 0; i < (int)window.getSize().y; i += 64) {
-        RectangleShape line(Vector2f(window.getSize().x, 2.f));
+    for (float i = 0; i < window.getSize().y; i += 64) {
+        RectangleShape line(Vector2f((float)window.getSize().x, 2.f));
         line.setFillColor(Color::Magenta);
         line.setPosition(0, i);
         lines.push_back(line);
     }
-    for (int i = 0; i < (int)window.getSize().x; i += 64) {
-        RectangleShape line(Vector2f(window.getSize().y, 2.f));
+    for (float i = 0; i < window.getSize().x; i += 64) {
+        RectangleShape line(Vector2f((float)window.getSize().y, 2.f));
         line.setFillColor(Color::Magenta);
         line.setPosition(i, 0);
         line.setRotation(90);
@@ -81,7 +81,7 @@ int main()
     float speed = 500;
     Vector2f velocity(0, 0);
     Player player("shrimp64.png");
-    player.setPos(Vector2f(window.getSize().x / 2, window.getSize().y / 2));
+    player.setPos(Vector2f((float)window.getSize().x / 2, (float)window.getSize().y / 2));
 
     // Main Game Loop
     while (window.isOpen())
@@ -99,7 +99,7 @@ int main()
 
         // Update cursor position
         sf::Vector2i mousepos = sf::Mouse::getPosition(window);
-        sprite.setPosition(mousepos.x - (int)(texture.getSize().x / 2), mousepos.y - (int)(texture.getSize().y / 2));
+        sprite.setPosition((float)mousepos.x - (texture.getSize().x / 2), (float)mousepos.y - (texture.getSize().y / 2));
 
         // Universal Controls
         // t flip flop now

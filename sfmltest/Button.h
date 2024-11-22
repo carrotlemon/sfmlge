@@ -5,7 +5,6 @@
 #include "Box.h"
 #include "QuadTree.h"
 #include <vector>
-#include <any>
 
 using namespace sf;
 
@@ -23,7 +22,7 @@ private:
 public:
   Button();
   Button(const std::string& identity);
-  Button(const std::string& identity, const std::string& str, Vector2f p, Vector2f s, std::function<void()> a);
+  Button(const std::string& identity, const std::string& str, Vector2f p, Vector2f s, std::function<void(bool&)> a);
   void setAction(std::function<void()> func);
   void click();
   quadtree::Box<float> getBoundingBox() const;
