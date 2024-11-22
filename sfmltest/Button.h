@@ -4,6 +4,8 @@
 #include <functional>
 #include "Box.h"
 #include "QuadTree.h"
+#include <vector>
+#include <any>
 
 using namespace sf;
 
@@ -13,7 +15,9 @@ private:
     std::string id;
     Texture texture;
     Sprite sprite;
-	std::function<void()> action;
+    std::function<void()> actionNone;
+	std::function<void(bool&)> actionBool;
+    std::function<void(std::vector<bool>)> actionMulti;
     Vector2f pos;
     Vector2f size;
 public:

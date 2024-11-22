@@ -17,19 +17,19 @@ Button::Button(const std::string& identity) :
 }
 
 Button::Button(const std::string& identity, const std::string& str, Vector2f p, Vector2f s, std::function<void()> a) : 
-    id(identity), pos(p), size(s), action(a) {
+    id(identity), pos(p), size(s), actionNone(a) {
     if (!texture.loadFromFile(str)) {}
     sprite.setTexture(texture);
 }
 
 void Button::setAction(std::function<void()> func) {
-    action = func;
+    actionNone = func;
 }
 
 // Method that calls the stored function
 void Button::click() {
-    if (action) { // Check if a function is set
-        action();
+    if (actionNone) { // Check if a function is set
+        actionNone();
     }
     else {
         std::cout << "No function set for this instance.\n";

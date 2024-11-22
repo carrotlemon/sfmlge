@@ -25,11 +25,11 @@ struct Object { // example object for testing quadtree
 
 int main()
 {
-    std::cout << misc() << std::endl;
-
     // Test Button
     Button b("test", "shrimp.png", Vector2f(800, 800), Vector2f(64, 64),
         []() {std::cout << "button works"; });
+    Button pauseButton("pause", "xButton.png", Vector2f(50, 50), Vector2f(256, 256), 
+        [](bool& paused) { paused = !paused; });
     Menu testMenu("testMenu", Vector2f(0, 0), Vector2f(1080, 1440));
     testMenu.addButton(b);
     Menu noMenu("", Vector2f(0, 0), Vector2f(1080, 1440));

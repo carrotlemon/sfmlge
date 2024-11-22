@@ -1,9 +1,5 @@
 #pragma once
 
-int misc() {
-	return -123123123;
-}
-
 Vector2f movementControls(float speed) {
     Vector2f velocity(0, 0);
 
