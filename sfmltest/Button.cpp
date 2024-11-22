@@ -42,7 +42,7 @@ quadtree::Box<float> Button::getBoundingBox() const {
 
 bool Button::equals(const Button& other) const {
     return id == other.id;
-}
+  }
 
 void Button::draw(RenderWindow& w) {
     sprite.setPosition(pos);

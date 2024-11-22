@@ -56,7 +56,6 @@ void Menu::click(Vector2i mousePos) {
     std::cout << "clicked: " << clicked.size() << std::endl;
     for (Button b : clicked) {
         b.click();
-    }
 }
 
 

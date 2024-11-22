@@ -65,7 +65,7 @@ int main()
     // Clock
     Clock clock;
     bool paused = false;
-    Menu currentMenu; // default menu does nothi
+    Menu currentMenu; // default menu does nothing
     bool pausedthistime = false;
     bool clickedthistime = false;
 
