@@ -52,7 +52,7 @@ void Menu::draw(RenderWindow& w) {
 }
 
 void Menu::click(Vector2i mousePos) {
-    std::vector<Button> clicked = buttons->findValuesAtPoint(mousePos.x, mousePos.y);
+    std::vector<Button> clicked = buttons->findValuesAtPoint((float)mousePos.x, (float)mousePos.y);
     std::cout << "clicked: " << clicked.size() << std::endl;
     for (Button b : clicked) {
         b.click();

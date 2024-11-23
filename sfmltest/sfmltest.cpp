@@ -25,11 +25,18 @@ struct Object { // example object for testing quadtree
 
 int main()
 {
+    // Clock
+    Clock clock;
+    bool paused = false;
+    Menu currentMenu; // default menu does nothing
+    bool pausedthistime = false;
+    bool m1Toggle = false;
+
     // Test Button
     Button b("test", "shrimp.png", Vector2f(800, 800), Vector2f(64, 64),
-        [](bool& blank) {std::cout << "button works"; });
-    Button pauseButton("pause", "xButton.png", Vector2f(50, 50), Vector2f(256, 256), 
-        [](bool& paused) { paused = !paused; });
+        []() {std::cout << "button works"; });
+    Button pauseButton("pause", "xButton.png", Vector2f(50, 50), Vector2f(256, 256),
+        []() {  });
     Menu testMenu("testMenu", Vector2f(0, 0), Vector2f(1080, 1440));
     testMenu.addButton(b);
     Menu noMenu("", Vector2f(0, 0), Vector2f(1080, 1440));
@@ -61,13 +68,6 @@ int main()
         line.setRotation(90);
         lines.push_back(line);
     }
-
-    // Clock
-    Clock clock;
-    bool paused = false;
-    Menu currentMenu; // default menu does nothing
-    bool pausedthistime = false;
-    bool clickedthistime = false;
 
     // Block and Room test
     Block block(Vector2f(256, 256), Vector2f(64, 64), std::string("sprites/grass.png"));
@@ -146,19 +146,16 @@ int main()
 
         if (paused) {
             if (Mouse::isButtonPressed(Mouse::Button::Left)) {
-                if (!clickedthistime) {
+                if (!m1Toggle) {
                     currentMenu.click(Mouse::getPosition(window));
-                    clickedthistime = true;
+                    m1Toggle = true;
                 }
             }
             else {
-                clickedthistime = false;
+                m1Toggle = false;
             }
-                
         }
-        else {
-            
-        }
+
         currentMenu.draw(window);
         window.draw(sprite);
 
