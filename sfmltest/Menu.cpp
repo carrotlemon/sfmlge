@@ -33,6 +33,7 @@ Menu::Menu(const std::string& n, Vector2f p, Vector2f s) :
     );
 }
 
+// Change list ----------------------------------------------------------------
 void Menu::addButton(const Button& b) {
     buttons->add(b);
 
@@ -44,13 +45,7 @@ Button Menu::removeButton(const std::string& id) {
     return temp;
 }
 
-void Menu::draw(RenderWindow& w) {
-    std::vector<Button> buttonList = buttons->query(boundary);
-    for (Button b : buttonList) {
-        b.draw(w);
-    }
-}
-
+// Action ----------------------------------------------------------------
 void Menu::click(Vector2i mousePos) {
     std::vector<Button> clicked = buttons->findValuesAtPoint((float)mousePos.x, (float)mousePos.y);
     std::cout << "clicked: " << clicked.size() << std::endl;
@@ -59,4 +54,10 @@ void Menu::click(Vector2i mousePos) {
     }
 }
 
-
+// Other ----------------------------------------------------------------
+void Menu::draw(RenderWindow& w) {
+    std::vector<Button> buttonList = buttons->query(boundary);
+    for (Button b : buttonList) {
+        b.draw(w);
+    }
+}

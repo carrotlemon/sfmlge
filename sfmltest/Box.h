@@ -5,20 +5,20 @@ using namespace sf;
 
 namespace quadtree {
 	template<typename T>
-	class Box
-	{
-	public:
-		T left;
-		T top;
-		T width;
-		T height;
+    class Box
+    {
+    public:
+        T left;
+        T top;
+        T width;
+        T height;
 
-		constexpr Box(T Left = 0, T Top = 0, T Width = 0, T Height = 0) noexcept : 
-			left(Left), top(Top), width(Width), height(Height)
-		{ // directly assigns variables (more efficient)
+        constexpr Box(T Left = 0, T Top = 0, T Width = 0, T Height = 0) noexcept :
+            left(Left), top(Top), width(Width), height(Height)
+        { // directly assigns variables (more efficient)
             // = 0 -> defaults to 0
             // noexcept -> no exceptions -> more safe and more efficient
-		}
+        }
         constexpr Box(const Vector2<T>& position, const Vector2<T>& size) noexcept :
             left(position.x), top(position.y), width(size.x), height(size.y)
         {

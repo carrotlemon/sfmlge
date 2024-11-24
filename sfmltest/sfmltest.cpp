@@ -25,15 +25,15 @@ struct Object { // example object for testing quadtree
 
 int main()
 {
-    // Clock
+    // Clock ----------------------------------------------------------------
     Clock clock;
     bool paused = false;
     Menu currentMenu; // default menu does nothing
     bool pausedthistime = false;
     bool m1Toggle = false;
 
-    // Test Button
-    Button b("test", "shrimp.png", Vector2f(800, 800), Vector2f(64, 64),
+    // Test Button ----------------------------------------------------------------
+    Button b("test", "xButton.png", Vector2f(800, 800), Vector2f(256, 256),
         []() {std::cout << "button works"; });
     Button pauseButton("pause", "xButton.png", Vector2f(50, 50), Vector2f(256, 256),
         []() {  });
@@ -42,10 +42,10 @@ int main()
     Menu noMenu("", Vector2f(0, 0), Vector2f(1080, 1440));
     //b.onClick();
 
-    // Initialize window
+    // Initialize window ----------------------------------------------------------------
     sf::RenderWindow window(sf::VideoMode(1440, 1080), "SFML works!");
     
-    // Mouse cursor to shrimp
+    // Mouse shrimp to cursor ----------------------------------------------------------------
     sf::Texture texture;
     if (!texture.loadFromFile("shrimp64.png")) {
         std::cout << "error loading image" << std::endl;
@@ -53,7 +53,7 @@ int main()
     sf::Sprite sprite;
     sprite.setTexture(texture);
 
-    // Grid of lines spaced 64 pixels apart
+    // Grid of lines spaced 64 pixels apart ----------------------------------------------------------------
     std::vector<RectangleShape> lines;
     for (float i = 0; i < window.getSize().y; i += 64) {
         RectangleShape line(Vector2f((float)window.getSize().x, 2.f));
@@ -69,21 +69,23 @@ int main()
         lines.push_back(line);
     }
 
-    // Block and Room test
+    // Block and Room test ----------------------------------------------------------------
+    Room room("roomname", Vector2f(0, 0), Vector2f(window.getSize()));
     Block block(Vector2f(256, 256), Vector2f(64, 64), std::string("sprites/grass.png"));
+    room.addBlock(block);
     Block block2(Vector2f(320, 256), Vector2f(64, 64), std::string("sprites/grass.png"));
-    std::vector<Block> blocklist;
-    blocklist.push_back(block);
-    blocklist.push_back(block2);
-    Room room(blocklist);
+    room.addBlock(block2);
+    Block block3(Vector2f(384, 256), Vector2f(64, 64), 0);
+    block3.setHitBoxToggle(false);
+    room.addBlock(block3);
 
-    // Player vars
+    // Player vars ----------------------------------------------------------------
     float speed = 500;
     Vector2f velocity(0, 0);
     Player player("shrimp64.png");
     player.setPos(Vector2f((float)window.getSize().x / 2, (float)window.getSize().y / 2));
 
-    // Main Game Loop
+    // Main Game Loop ----------------------------------------------------------------
     while (window.isOpen())
     {
         // Get Delta Time

@@ -7,10 +7,9 @@
 
 using namespace std;
 
+// Constructors ----------------------------------------------------------------
 Button::Button(const std::string& identity) : 
-    id(identity), pos(Vector2f(0, 0)), size(Vector2f(1, 1)) {
-
-}
+    id(identity), pos(Vector2f(0, 0)), size(Vector2f(1, 1)), toggle(false) {}
 
 Button::Button(const std::string& identity, const std::string& str, Vector2f p, Vector2f s, std::function<void()> a) :
     id(identity), pos(p), size(s), action(a), toggle(false) {
@@ -18,6 +17,7 @@ Button::Button(const std::string& identity, const std::string& str, Vector2f p, 
     sprite.setTexture(texture);
 }
 
+// Set ----------------------------------------------------------------
 void Button::setAction(std::function<void()> func) {
     action = func;
 }
@@ -34,10 +34,12 @@ bool Button::click() {
     return false;
 }
 
+// Get methods ----------------------------------------------------------------
 quadtree::Box<float> Button::getBoundingBox() const {
     return quadtree::Box<float>(pos.x, pos.y, size.x, size.y);
 }
 
+// Other ----------------------------------------------------------------
 bool Button::equals(const Button& other) const {
     return id == other.id;
   }
