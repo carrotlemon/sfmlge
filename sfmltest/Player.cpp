@@ -5,6 +5,8 @@
 #include <vector>
 #include "Room.h"
 #include "Block.h"
+#include "QuadTree.h"
+#include "Box.h"
 
 using namespace sf;
 
@@ -38,6 +40,10 @@ Vector2f Player::getPos() {
 
 Vector2f Player::getSize() {
 	return size;
+}
+
+quadtree::Box<float> Player::getBoundingBox() {
+	return quadtree::Box<float>(pos, size);
 }
 
 // Other ----------------------------------------------------------------

@@ -8,37 +8,45 @@
 using namespace sf;
 
 // Constructors ----------------------------------------------------------------
-Block::Block(Vector2f p, Vector2f s, int i) : 
-	id(i), pos(p), size(s), hitboxtoggle(true) {
+Block::Block(Vector2f p, Vector2f s, int i, bool b) : 
+	id(i), pos(p), size(s), hitboxtoggle(b) {
 	std::string file = "sprites/" + std::to_string(i) + ".png";
+	std::cout << file << std::endl;
 	if (!texture.loadFromFile(file)) {
 		std::cout << "Error Loading Image: " << file << std::endl;
 	}
 	sprite.setTexture(texture);
 }
 
-Block::Block(Vector2f p, Vector2f s, const std::string& str) : 
-	id(-1), pos(p), size(s), hitboxtoggle(true) {
+Block::Block(Vector2f p, Vector2f s, const std::string& str, bool b) : 
+	id(-1), pos(p), size(s), hitboxtoggle(b) {
 	if (!texture.loadFromFile(str)) {
 		std::cout << "Error Loading Image: " << str << std::endl;
 	}
 	sprite.setTexture(texture);
 }
 
-bool Block::collides(Vector2f p, Vector2f s) { // Assumes both are Rectangles
-	// AABB - Axis Aligned Bounding Box
-	return hitboxtoggle && (
-			pos.x < p.x + s.x &&
-			pos.x + size.x > p.x &&
-			pos.y < p.y + s.y &&
-			pos.y + size.y > p.y
-		);
+Block::Block(const Block& other) : 
+	id(other.id), pos(other.pos), size(other.size), hitboxtoggle(other.hitboxtoggle) {
+	std::string file = "sprites/" + std::to_string(other.id) + ".png";
+	if (!texture.loadFromFile(file)) {
+		std::cout << "Error Loading Image: " << file << std::endl;
+	}
+	sprite.setTexture(texture);
 }
 
 // Action Methods ----------------------------------------------------------------
 void Block::draw(RenderWindow& w) {
 	sprite.setPosition(pos);
 	w.draw(sprite);
+}
+
+void Block::reloadTexture() {
+	std::string file = "sprites/" + std::to_string(id) + ".png";
+	if (!texture.loadFromFile(file)) {
+		std::cout << "Error Loading Image: " << file << std::endl;
+	}
+	sprite.setTexture(texture);
 }
 
 void Block::setHitBoxToggle(bool b) {
@@ -65,6 +73,16 @@ quadtree::Box<float> Block::getBoundingBox() const {
 // Other methods ----------------------------------------------------------------
 bool Block::equals(const Block& other) const {
 	return id == other.id;
+}
+
+bool Block::collides(Vector2f p, Vector2f s) { // Assumes both are Rectangles
+	// AABB - Axis Aligned Bounding Box
+	return hitboxtoggle && (
+		pos.x < p.x + s.x &&
+		pos.x + size.x > p.x &&
+		pos.y < p.y + s.y &&
+		pos.y + size.y > p.y
+		);
 }
 
 std::ostream& operator<< (std::ostream& os, const Block& v)

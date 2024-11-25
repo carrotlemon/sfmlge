@@ -12,6 +12,7 @@
 #include "Box.h"
 #include "Menu.h"
 #include "Misc.h"
+#include "MapBuilder.h"
 
 using namespace sf;
 
@@ -33,25 +34,27 @@ int main()
     bool m1Toggle = false;
 
     // Test Button ----------------------------------------------------------------
-    Button b("test", "xButton.png", Vector2f(800, 800), Vector2f(256, 256),
+    bool thisdoesnothing = true;
+    std::cout << "paused: " << &paused << std::endl;
+    Button b("test", "xButton.png", Vector2f(800, 800), Vector2f(256, 256), thisdoesnothing, 
         []() {std::cout << "button works"; });
-    Button pauseButton("pause", "xButton.png", Vector2f(50, 50), Vector2f(256, 256),
-        []() {  });
+    Button pauseButton("pause", "xButton.png", Vector2f(50, 50), Vector2f(256, 256), paused,
+        []() {});
     Menu testMenu("testMenu", Vector2f(0, 0), Vector2f(1080, 1440));
     testMenu.addButton(b);
+    testMenu.addButton(pauseButton);
     Menu noMenu("", Vector2f(0, 0), Vector2f(1080, 1440));
-    //b.onClick();
 
     // Initialize window ----------------------------------------------------------------
     sf::RenderWindow window(sf::VideoMode(1440, 1080), "SFML works!");
     
     // Mouse shrimp to cursor ----------------------------------------------------------------
-    sf::Texture texture;
-    if (!texture.loadFromFile("shrimp64.png")) {
+    sf::Texture texture1;
+    if (!texture1.loadFromFile("shrimp64.png")) {
         std::cout << "error loading image" << std::endl;
     }
     sf::Sprite sprite;
-    sprite.setTexture(texture);
+    sprite.setTexture(texture1);
 
     // Grid of lines spaced 64 pixels apart ----------------------------------------------------------------
     std::vector<RectangleShape> lines;
@@ -78,8 +81,10 @@ int main()
     Block block3(Vector2f(384, 256), Vector2f(64, 64), 0);
     block3.setHitBoxToggle(false);
     room.addBlock(block3);
-    
-    room.fill(Vector2f(448, 512), Vector2f(64, 64), Vector2f(3, 3), 0);
+    room.addBlock(Block(Vector2f(512, 256), Vector2f(64, 64), 0, true));
+
+    std::vector<Block> blist = fill(Vector2f(448, 512), Vector2f(64, 64), Vector2i(3, 3), 0, false);
+    room.addBlocks(blist);
 
     // Player vars ----------------------------------------------------------------
     float speed = 500;
@@ -103,7 +108,7 @@ int main()
 
         // Update cursor position
         sf::Vector2i mousepos = sf::Mouse::getPosition(window);
-        sprite.setPosition((float)mousepos.x - (texture.getSize().x / 2), (float)mousepos.y - (texture.getSize().y / 2));
+        sprite.setPosition((float)mousepos.x - (texture1.getSize().x / 2), (float)mousepos.y - (texture1.getSize().y / 2));
 
         // Universal Controls
         // t flip flop now
@@ -136,6 +141,7 @@ int main()
             }
         }
         else { // game paused
+
         }
         // Draw stuff
         window.clear();
@@ -147,11 +153,13 @@ int main()
             window.draw(line);
         }
         player.draw(window);
-
+        //std::cout << "paused" << paused << std::endl;
         if (paused) {
             if (Mouse::isButtonPressed(Mouse::Button::Left)) {
                 if (!m1Toggle) {
                     currentMenu.click(Mouse::getPosition(window));
+                    if (!paused)
+                        currentMenu = noMenu;
                     m1Toggle = true;
                 }
             }

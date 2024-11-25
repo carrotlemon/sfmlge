@@ -39,11 +39,12 @@ void Menu::addButton(const Button& b) {
 
 }
 
-Button Menu::removeButton(const std::string& id) {
-    Button temp(id);
-    buttons->remove(temp);
-    return temp;
-}
+//Button Menu::removeButton(const std::string& id) {
+//    bool b;
+//    Button temp(id, "", Vector2f(0, 0), Vector2f(1, 1), b, []() {});
+//    buttons->remove(temp);
+//    return temp;
+//}
 
 // Action ----------------------------------------------------------------
 void Menu::click(Vector2i mousePos) {

@@ -14,13 +14,13 @@ private:
     std::string id;
     Texture texture;
     Sprite sprite;
-    bool toggle;
+    bool& toggle;
     Vector2f pos;
     Vector2f size;
 	std::function<void()> action;
 public:
-  Button(const std::string& identity);
-  Button(const std::string& identity, const std::string& str, Vector2f p, Vector2f s, std::function<void()> a);
+  Button(const std::string& identity, const std::string& str, Vector2f p, Vector2f s, bool& b, std::function<void()> a);
+  Button(const Button& other);
   void setAction(std::function<void()> func);
   bool click();
   quadtree::Box<float> getBoundingBox() const;

@@ -18,15 +18,21 @@ private:
 	Vector2f pos;
 	Vector2f size;
 public:
-	Block(Vector2f p, Vector2f s, int i);
-	Block(Vector2f p, Vector2f s, const std::string& str);
-	bool collides(Vector2f p, Vector2f s);
-	void draw(RenderWindow& w);
+	Block(Vector2f p, Vector2f s, int i, bool b = true);
+	Block(Vector2f p, Vector2f s, const std::string& str, bool b = true);
+	Block(const Block& other);
+
 	Vector2f getPos();
 	Vector2f getSize();
-	void setHitBoxToggle(bool b);
-	bool equals(const Block& other) const;
 	bool isHitBoxToggled();
+	bool collides(Vector2f p, Vector2f s);
+
+	void setHitBoxToggle(bool b);
+
+	void reloadTexture();
+	void draw(RenderWindow& w);
+	bool equals(const Block& other) const;
+	
 	quadtree::Box<float> getBoundingBox() const;
 
 	friend std::ostream& operator<< (std::ostream& os, const Block& v);
