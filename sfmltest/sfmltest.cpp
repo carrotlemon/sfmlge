@@ -78,6 +78,8 @@ int main()
     Block block3(Vector2f(384, 256), Vector2f(64, 64), 0);
     block3.setHitBoxToggle(false);
     room.addBlock(block3);
+    
+    room.fill(Vector2f(448, 512), Vector2f(64, 64), Vector2f(3, 3), 0);
 
     // Player vars ----------------------------------------------------------------
     float speed = 500;

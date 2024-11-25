@@ -28,6 +28,37 @@ Room::Room(const std::string& n, Vector2f p, Vector2f s) :
 }
 
 // Map Builder Tools ----------------------------------------------------------------
+void Room::fill(Vector2f pos, Vector2f blockSize, Vector2f fillSize, int id, bool hitboxtoggle) {
+	for (int row = 0; row <= fillSize.y; ++row) {
+		for (int col = 0; col <= fillSize.x; ++col) {
+			Block block(Vector2f(pos.x + blockSize.x * col, pos.y + blockSize.y * row), blockSize, id);
+			if (!hitboxtoggle)
+				block.setHitBoxToggle(false);
+			addBlock(block);
+		}
+	}
+}
+
+void Room::outline(Vector2f pos, Vector2f blockSize, Vector2f fillSize, int id, bool hitboxtoggle) {
+	// top and bottom
+	for (int row = 0; row <= fillSize.y; row += fillSize.y) {
+		for (int col = 0; col <= fillSize.x; ++col) {
+			Block block(Vector2f(pos.x + blockSize.x * col, pos.y + blockSize.y * row), blockSize, id);
+			if (!hitboxtoggle)
+				block.setHitBoxToggle(false);
+			addBlock(block);
+		}
+	}
+	// sides
+	for (int row = 1; row <= fillSize.y-1; ++row) {
+		for (int col = 0; col <= fillSize.x; col += fillSize.x) {
+			Block block(Vector2f(pos.x + blockSize.x * col, pos.y + blockSize.y * row), blockSize, id);
+			if (!hitboxtoggle)
+				block.setHitBoxToggle(false);
+			addBlock(block);
+		}
+	}
+}
 
 
 // Change blocks ----------------------------------------------------------------

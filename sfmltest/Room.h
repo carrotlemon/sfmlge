@@ -22,10 +22,19 @@ private:
 	Vector2f pos;
 	Vector2f size;
 public:
+	// Constructors
 	Room();
 	Room(const std::string& n, Vector2f p, Vector2f s);
+
+	// Map Builder Tools
+	void fill(Vector2f pos, Vector2f blockSize, Vector2f fillSize, int id, bool hitboxtoggle = true);
+	void outline(Vector2f pos, Vector2f blockSize, Vector2f fillSize, int id, bool hitboxtoggle = true);
+
+	// Change blocks
 	void addBlock(const Block& b);
 	Block removeBlock(int id);
+
+	// Other
 	void draw(RenderWindow& w);
 	bool collides(Vector2f pos, Vector2f size); // assumes square
 };
