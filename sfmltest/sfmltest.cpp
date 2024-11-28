@@ -16,37 +16,39 @@
 
 using namespace sf;
 
-struct Object { // example object for testing quadtree
-    float x, y, width, height, id;
-
-    quadtree::Box<float> getBoundingBox() const {
-        return quadtree::Box<float>(x, y, width, height);
-    }
-};
-
 int main()
 {
+    // Initialize window ----------------------------------------------------------------
+    sf::RenderWindow window(sf::VideoMode(1440, 1080), "SFML works!");
+
+    // Camera ----------------------------------------------------------------
+    // create a view with its center and size
+    Vector2f wsize = (Vector2f)window.getSize();
+    sf::View view(sf::Vector2f(wsize.x / 2, wsize.y / 2), wsize);
+    window.setView(view);
+
     // Clock ----------------------------------------------------------------
     Clock clock;
-    bool paused = false;
+    bool paused = true;
     Menu currentMenu; // default menu does nothing
     bool pausedthistime = false;
     bool m1Toggle = false;
 
-    // Test Button ----------------------------------------------------------------
-    bool thisdoesnothing = true;
-    std::cout << "paused: " << &paused << std::endl;
-    Button b("test", "xButton.png", Vector2f(800, 800), Vector2f(256, 256), thisdoesnothing, 
-        []() {std::cout << "button works"; });
-    Button pauseButton("pause", "xButton.png", Vector2f(50, 50), Vector2f(256, 256), paused,
+    // Main Menu ----------------------------------------------------------------
+    Button startButton("start", "startButton.png", Vector2f((float)window.getSize().x / 2 - 128, 
+        (float)window.getSize().y / 3 - 128), Vector2f(256, 128), paused, []() {});
+    Menu mainMenu("mainmenu", Vector2f(0, 0), (Vector2f)window.getSize());
+    mainMenu.addButton(startButton);
+    currentMenu = mainMenu;
+    // Paused Game Menu ----------------------------------------------------------------
+    Button resumeButton("pause", "xButton.png", Vector2f(50, 50), Vector2f(256, 256), paused,
         []() {});
-    Menu testMenu("testMenu", Vector2f(0, 0), Vector2f(1080, 1440));
-    testMenu.addButton(b);
-    testMenu.addButton(pauseButton);
-    Menu noMenu("", Vector2f(0, 0), Vector2f(1080, 1440));
+    Menu pausedMenu("testMenu", Vector2f(0, 0), Vector2f(1080, 1440));
+    pausedMenu.addButton(resumeButton);
 
-    // Initialize window ----------------------------------------------------------------
-    sf::RenderWindow window(sf::VideoMode(1440, 1080), "SFML works!");
+    Menu noMenu("nomenu", Vector2f(0, 0), Vector2f(1080, 1440));
+
+    
     
     // Mouse shrimp to cursor ----------------------------------------------------------------
     sf::Texture texture1;
@@ -55,22 +57,6 @@ int main()
     }
     sf::Sprite sprite;
     sprite.setTexture(texture1);
-
-    // Grid of lines spaced 64 pixels apart ----------------------------------------------------------------
-    std::vector<RectangleShape> lines;
-    for (float i = 0; i < window.getSize().y; i += 64) {
-        RectangleShape line(Vector2f((float)window.getSize().x, 2.f));
-        line.setFillColor(Color::Magenta);
-        line.setPosition(0, i);
-        lines.push_back(line);
-    }
-    for (float i = 0; i < window.getSize().x; i += 64) {
-        RectangleShape line(Vector2f((float)window.getSize().y, 2.f));
-        line.setFillColor(Color::Magenta);
-        line.setPosition(i, 0);
-        line.setRotation(90);
-        lines.push_back(line);
-    }
 
     // Block and Room test ----------------------------------------------------------------
     Room room("roomname", Vector2f(0, 0), Vector2f(window.getSize()));
@@ -99,16 +85,16 @@ int main()
         Time dt = clock.restart();
 
         // Window events
-        sf::Event event;
+        Event event;
         while (window.pollEvent(event))
         {
-            if (event.type == sf::Event::Closed)
+            if (event.type == Event::Closed)
                 window.close();
         }
 
         // Update cursor position
-        sf::Vector2i mousepos = sf::Mouse::getPosition(window);
-        sprite.setPosition((float)mousepos.x - (texture1.getSize().x / 2), (float)mousepos.y - (texture1.getSize().y / 2));
+        Vector2i mousepos = Mouse::getPosition(window);
+        sprite.setPosition(window.mapPixelToCoords(Vector2i((float)mousepos.x - (texture1.getSize().x / 2), (float)mousepos.y - (texture1.getSize().y / 2))));
 
         // Universal Controls
         // t flip flop now
@@ -116,7 +102,7 @@ int main()
             if (!pausedthistime) {
                 paused = !paused;
                 if (paused)
-                    currentMenu = testMenu;
+                    currentMenu = pausedMenu;
                 else
                     currentMenu = noMenu;
                 pausedthistime = true;
@@ -126,35 +112,21 @@ int main()
             pausedthistime = false;
         }
 
-        if (!paused) {
+        if (currentMenu.equals(noMenu) && !paused) { // Only move when game is not paused
             // Movement Controls
             velocity = movementControls(speed);
 
-            velocity.y *= dt.asSeconds();
+            // Horizontal Movement
             velocity.x *= dt.asSeconds();
-            // if players new pos doesn't collide, move it
-            if (!room.collides(Vector2f(player.getPos().x + velocity.x, player.getPos().y), player.getSize())) {
-                player.move(Vector2f(velocity.x, 0));
-            }
-            if (!room.collides(Vector2f(player.getPos().x, player.getPos().y + velocity.y), player.getSize())) {
-                player.move(Vector2f(0, velocity.y));
-            }
-        }
-        else { // game paused
+            float maxX = moveUntilCollision(room, 0, velocity.x, player.getPos(), player.getSize(), true);
+            player.move(Vector2f(maxX, 0));
 
-        }
-        // Draw stuff
-        window.clear();
+            // Vertical Movement
+            velocity.y *= dt.asSeconds();
+            float maxY = moveUntilCollision(room, 0, velocity.y, player.getPos(), player.getSize(), false);
+            player.move(Vector2f(0, maxY));
 
-        //window.draw(shape);
-        room.draw(window);
-        
-        for (RectangleShape line : lines) {
-            window.draw(line);
-        }
-        player.draw(window);
-        //std::cout << "paused" << paused << std::endl;
-        if (paused) {
+        } else {
             if (Mouse::isButtonPressed(Mouse::Button::Left)) {
                 if (!m1Toggle) {
                     currentMenu.click(Mouse::getPosition(window));
@@ -167,6 +139,18 @@ int main()
                 m1Toggle = false;
             }
         }
+
+        // Update Camera
+        view.setCenter(player.getPos());
+        window.setView(view);
+
+        // Draw stuff
+        window.clear();
+
+        //window.draw(shape);
+        room.draw(window);
+
+        player.draw(window);
 
         currentMenu.draw(window);
         window.draw(sprite);

@@ -31,9 +31,12 @@ public:
 	void addBlocks(const std::vector<Block>& blist);
 	Block removeBlock(int id);
 
+	// Get
+	quadtree::Box<float> getBoundingBox() const;
+
 	// Other
 	void reloadTextures();
-	void draw(RenderWindow& w);
-	bool collides(Vector2f pos, Vector2f size); // assumes square
+	void draw(RenderWindow& w) const;
+	bool collides(Vector2f pos, Vector2f size) const; // assumes square
 };
 

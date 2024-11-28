@@ -10,8 +10,6 @@ using namespace std;
 // Constructors ----------------------------------------------------------------
 Button::Button(const std::string& identity, const std::string& str, Vector2f p, Vector2f s, bool& b, std::function<void()> a) :
     id(identity), pos(p), size(s), action(a), toggle(b) {
-    std::cout << "b: " << &b << std::endl;
-    std::cout << "toggle: " << &toggle << std::endl;
     if (!texture.loadFromFile(str)) {}
     sprite.setTexture(texture);
 }
@@ -32,7 +30,6 @@ bool Button::click() {
     if (action) { // Check if a function is set
         action();
         toggle = !toggle;
-        std::cout << &toggle << std::endl;
         return true;
     }
     else {
@@ -54,4 +51,8 @@ bool Button::equals(const Button& other) const {
 void Button::draw(RenderWindow& w) {
     sprite.setPosition(pos);
     w.draw(sprite);
+}
+
+std::ostream& operator<< (std::ostream& os, const Button& v) {
+    return os << "Button " << v.id << ": X " << v.pos.x << " Y " << v.pos.x << " W " << v.size.x << " H " << v.size.x;
 }

@@ -26,5 +26,7 @@ public:
   quadtree::Box<float> getBoundingBox() const;
   bool equals(const Button& other) const;
   void draw(RenderWindow& w);
+
+  friend std::ostream& operator<< (std::ostream& os, const Button& v);
 };
 

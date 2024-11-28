@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
+#include <string>
 #include "Button.h"
 
 using namespace sf;
@@ -8,7 +9,7 @@ using namespace sf;
 class Menu
 {
 private:
-    std::string name;
+    std::string id;
     quadtree::Box<float> boundary;
     quadtree::QuadTree<Button,
         std::function<quadtree::Box<float>(const Button&)>,
@@ -19,8 +20,8 @@ public:
     Menu();
     Menu(const std::string& n, Vector2f p, Vector2f s);
     void addButton(const Button& b);
-    //Button removeButton(const std::string& id);
     void draw(RenderWindow& w);
     void click(Vector2i mousePos);
+    bool equals(const Menu& other) const;
 };
 

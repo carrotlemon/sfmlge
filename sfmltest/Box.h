@@ -59,7 +59,7 @@ namespace quadtree {
         constexpr bool contains(Vector2<T> point) const noexcept
         {
             return left <= point.x && point.x <= getRight() &&
-                top <= point.y && point.x <= getBottom();
+                top <= point.y && point.y <= getBottom();
         }
 
         constexpr bool intersects(const Box<T>& box) const noexcept

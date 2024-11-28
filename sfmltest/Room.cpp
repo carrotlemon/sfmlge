@@ -46,6 +46,11 @@ Block Room::removeBlock(int id) {
 	return temp;
 }
 
+// Get ----------------------------------------------------------------
+quadtree::Box<float> Room::getBoundingBox() const {
+	return boundary;
+}
+
 // Other ----------------------------------------------------------------
 void Room::reloadTextures() {
 	std::vector<Block> blist = blocks->getAllValues();
@@ -54,14 +59,17 @@ void Room::reloadTextures() {
 	}
 }
 
-void Room::draw(RenderWindow& w) {
+void Room::draw(RenderWindow& w) const {
 	std::vector<Block> blist = blocks->query(boundary);
 	for (Block b : blist) {
 		b.draw(w);
 	}
 }
 
-bool Room::collides(Vector2f pos, Vector2f size) {
+bool Room::collides(Vector2f pos, Vector2f size) const {
+	if(!boundary.contains(quadtree::Box<float>(pos, size)))
+		return true;
+
 	std::vector<Block> blist = blocks->query(quadtree::Box<float>(pos.x, pos.y, size.x, size.y));
 	if (blist.size() > 0) {
 		for (Block b : blist) {

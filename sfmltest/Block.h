@@ -22,10 +22,10 @@ public:
 	Block(Vector2f p, Vector2f s, const std::string& str, bool b = true);
 	Block(const Block& other);
 
-	Vector2f getPos();
-	Vector2f getSize();
-	bool isHitBoxToggled();
-	bool collides(Vector2f p, Vector2f s);
+	Vector2f getPos() const;
+	Vector2f getSize() const;
+	bool isHitBoxToggled() const;
+	bool collides(Vector2f p, Vector2f s) const;
 
 	void setHitBoxToggle(bool b);
 

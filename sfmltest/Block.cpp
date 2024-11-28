@@ -54,15 +54,15 @@ void Block::setHitBoxToggle(bool b) {
 }
 
 // Get methods ----------------------------------------------------------------
-Vector2f Block::getPos() {
+Vector2f Block::getPos() const {
 	return pos;
 }
 
-Vector2f Block::getSize() {
+Vector2f Block::getSize() const {
 	return size;
 }
 
-bool Block::isHitBoxToggled() {
+bool Block::isHitBoxToggled() const {
 	return hitboxtoggle;
 }
 
@@ -75,7 +75,7 @@ bool Block::equals(const Block& other) const {
 	return id == other.id;
 }
 
-bool Block::collides(Vector2f p, Vector2f s) { // Assumes both are Rectangles
+bool Block::collides(Vector2f p, Vector2f s) const { // Assumes both are Rectangles
 	// AABB - Axis Aligned Bounding Box
 	return hitboxtoggle && (
 		pos.x < p.x + s.x &&
