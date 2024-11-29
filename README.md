@@ -4,7 +4,7 @@ Begin:
 3. add SFML lib path to project properties -> Linker -> General -> Additional Lib Directories
 4. add things below (in same order) to project properties -> Linker -> Input -> Additional Dependencies
 
-(Must be on separate lines and in the same order presented here to work)
+(Must be on separate lines and in the same order presented here to work)\n
 sfml-graphics-s-d.lib
 sfml-window-s-d.lib
 sfml-system-s-d.lib
