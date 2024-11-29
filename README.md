@@ -14,3 +14,5 @@ opengl32.lib<br>
 freetype.lib<br>
 winmm.lib<br>
 gdi32.lib
+
+6. After finishing the program, you can remove the -d (debug) from the Additional Dependencies for it to run a bit smoother.
