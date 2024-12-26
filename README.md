@@ -1,5 +1,5 @@
 Begin:
-1. Download SFML and extract in an SFML folder in Documents
+1. Download SFML 2.6.2 (version important) and extract in an SFML folder in Documents
 2. IF YOU ARE ON WINDOWS VM: Build (top bar) -> Configuration Manager -> change the 2 things to 64x
 3. C/C++ -> Preprocessor -> Preprocessor Definitions -> add SFML_STATIC
 4. add SFML include path to project properties -> C++ -> Additional Include Directories
