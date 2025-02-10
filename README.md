@@ -1,4 +1,4 @@
-Begin:
+Note to self to setup for development:
 1. Download SFML 2.6.2 (version is important) and extract in an SFML folder in Documents
 2. IF YOU ARE ON WINDOWS VM: Build (top bar) -> Configuration Manager -> change the 2 things to 64x
 3. C/C++ -> Preprocessor -> Preprocessor Definitions -> add SFML_STATIC
